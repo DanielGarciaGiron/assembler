@@ -149,7 +149,7 @@ do_2:
 
 arreglo:
 	ldr r8,[r10],#4
-	mov lr,pc
+	mov pc, lr
 	
 
 
