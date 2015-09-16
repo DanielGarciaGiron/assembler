@@ -84,6 +84,11 @@ piano:
 	
 	revisar #18, do_2
 
+@@revisa los dos botones de play y reset.	
+	revisar #20, play
+	
+	revisar #21, reset
+
 	b piano
 
 
@@ -95,62 +100,88 @@ do:
 	
 	mov r8,#1
 	add r7,r7,#1
-	b arreglo
+	bl arreglo
 	
 re:
 	nota 1700
 	
 	mov r8,#2
 	add r7,r7,#1
-	b arreglo
+	bl arreglo
 		
 mi:
 	nota 1519
 	
 	mov r8,#3
 	add r7,r7,#1
-	b arreglo
+	bl arreglo
 
 fa:
 	nota 1432
 	
 	mov r8,r#4
 	add r7,r7,#1
-	b arreglo
+	bl arreglo
 	
 sol:
 	nota 1275
 	
 	mov r8,r#5
 	add r7,r7,#1
-	b arreglo
+	bl arreglo
 	
 la:
 	nota 1136
 	
 	mov r8,r#6
 	add r7,r7,#1
-	b arreglo
+	bl arreglo
 	
 si:
 	nota 1014
 	
 	mov r8,r#7
 	add r7,r7,#1
-	b arreglo
+	bl arreglo
 	
 do_2:
 	nota 956
 	
 	mov r8,r#8
 	add r7,r7,#1
-	b arreglo
+	bl arreglo
 
 
 arreglo:
 	ldr r8,[r10],#4
-	mov pc, lr
+	mov lr,pc
 	
+play:
+	ldr r11,=vector
+	ldr r9,[r11],#4
+	cmp r9,#1
+	beq do
+	cmp r9,#2
+	beq re
+	cmp r9,#3
+	beq mi
+	cmp r9,#4
+	beq fa
+	cmp r9,#5
+	beq sol
+	cmp r9,#6
+	beq la
+	cmp r9,#7
+	beq si
+	cmp r9,#8
+	beq do_2
+	cmp r9,#0
+	beq reset
+	
+	
+reset:
+
+
 
 
 
