@@ -1,0 +1,115 @@
+.section .init
+.globl _start
+_start:
+
+b main
+
+.macro encender puerto, estado
+    mov r0, \puerto
+    mov r1, \estado
+    bl SetGpio
+.endm
+
+.macro revisar boton, nota
+	ldr r5, [r4, #0x34]
+	mov r0, #1
+	lsl r0, \boton
+	and r5, r0
+	
+	teq r5, #0
+	bne \nota
+.endm
+
+.macro cargar puerto, estado
+	mov r0, \puerto
+	mov r1, \estado
+	bl SetGpioFunction
+.endm
+
+.macro nota periodo
+	encender #19, #0
+	ldr r0, = \periodo
+	bl Wait
+	
+	encender #19, #1
+	ldr r0, = \periodo
+	bl Wait
+	
+	b piano
+.endm
+
+.section .text
+
+main:
+    mov sp, #0x8000
+	
+	cargar #19, #1	@@bocina
+	cargar #13, #0	@@do
+	cargar  #6, #0	@@re
+	cargar #24, #0	@@mi
+	cargar #23, #0	@@fa
+	cargar #22, #0	@@sol
+	cargar #27, #0	@@la
+	cargar #17, #0	@@si
+	cargar #18, #0	@@do_2
+
+@@los dos botones de play y reset.
+	cargar #20, #0 @@boton play
+	cargar #21, #0 @@boton reset
+	
+	bl GetGpioAddress
+	mov r4,r0
+	
+piano:
+	revisar #13, do
+	
+	revisar #6,  re
+	
+	revisar #24, mi
+	
+	revisar #23, fa
+	
+	revisar #22, sol
+	
+	revisar #27, la
+	
+	revisar #17, si
+	
+	revisar #18, do_2
+
+	b piano
+
+
+
+@@se le asigna la variable temporal a r1, aqui se guarda el valor de la nota que se ingreso y 
+@@luego se va al final donde se guarda esa valor en el array.
+do:
+	nota 1915
+
+re:
+	nota 1700
+		
+mi:
+	nota 1519
+
+fa:
+	nota 1432
+	
+sol:
+	nota 1275
+	
+la:
+	nota 1136
+	
+si:
+	nota 1014
+	
+do_2:
+	nota 956
+
+
+.section .data
+.align 2
+
+vector:		.word 0,0,0,0,0,0,0,0,0,0,0,0
+temp:		.word 0
