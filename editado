@@ -59,7 +59,14 @@ main:
 	
 	bl GetGpioAddress
 	mov r4,r0
-	
+@@usar r7 como contador para recorrer el array y 
+@@r8 para la variable temporal que es la que se encarga de
+@@pasar los numeros al array.
+
+mov r7,#0
+mov r8,#0
+ldr r10,=vector
+
 piano:
 	revisar #13, do
 	
@@ -85,31 +92,71 @@ piano:
 @@luego se va al final donde se guarda esa valor en el array.
 do:
 	nota 1915
-
+	
+	mov r8,#1
+	add r7,r7,#1
+	b arreglo
+	
 re:
 	nota 1700
+	
+	mov r8,#2
+	add r7,r7,#1
+	b arreglo
 		
 mi:
 	nota 1519
+	
+	mov r8,#3
+	add r7,r7,#1
+	b arreglo
 
 fa:
 	nota 1432
 	
+	mov r8,r#4
+	add r7,r7,#1
+	b arreglo
+	
 sol:
 	nota 1275
+	
+	mov r8,r#5
+	add r7,r7,#1
+	b arreglo
 	
 la:
 	nota 1136
 	
+	mov r8,r#6
+	add r7,r7,#1
+	b arreglo
+	
 si:
 	nota 1014
 	
+	mov r8,r#7
+	add r7,r7,#1
+	b arreglo
+	
 do_2:
 	nota 956
+	
+	mov r8,r#8
+	add r7,r7,#1
+	b arreglo
+
+
+arreglo:
+	ldr r8,[r10],#4
+	mov lr,pc
+	
+
+
 
 
 .section .data
 .align 2
 
 vector:		.word 0,0,0,0,0,0,0,0,0,0,0,0
-temp:		.word 0
+
